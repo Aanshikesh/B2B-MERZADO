@@ -31,6 +31,16 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Ensure DB connection for every request (especially on serverless cold starts)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Route Handlers
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rfqs', require('./routes/rfqRoutes'));
@@ -42,8 +52,11 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+// Only listen when run directly (not in Vercel serverless)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
 
-module.exports = { app, server };
+module.exports = app;
