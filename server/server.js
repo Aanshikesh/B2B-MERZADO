@@ -22,6 +22,26 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Normalize Vercel rewritten URL parameters so routes match correctly in serverless
+app.use((req, res, next) => {
+  try {
+    const urlObj = new URL(req.url, 'http://localhost');
+    const vercelPath = urlObj.searchParams.get('_vercel_path');
+
+    if (vercelPath) {
+      urlObj.searchParams.delete('_vercel_path');
+      const search = urlObj.search;
+      const finalUrl = '/api/' + vercelPath + search;
+      req.url = finalUrl;
+      req.originalUrl = finalUrl;
+      req._parsedUrl = null;
+    }
+  } catch (e) {
+    // Continue
+  }
+  next();
+});
+
 // API Health Check
 app.get('/api/health', (req, res) => {
   res.status(200).json({
