@@ -56,23 +56,23 @@ The **B2B RFQ Marketplace** is a full-stack web application designed for enterpr
 
 ```mermaid
 flowchart TD
-    subgraph Client ["Client (React + Vite)"]
+    subgraph Client ["Client: React + Vite"]
         UI["UI Pages & Views"]
-        AuthContext["AuthContext (JWT & User State)"]
-        Axios["Axios API Client (Bearer Interceptor)"]
+        AuthContext["AuthContext: JWT & User State"]
+        Axios["Axios API Client"]
         UI --> AuthContext
         UI --> Axios
     end
 
-    subgraph Server ["Server (Node.js & Express REST API)"]
-        Router["Express Routers: /api/auth, /api/rfqs, /api/quotations"]
-        AuthMW["Middleware: protect, optionalAuth, authorize(role)"]
-        Controllers["Controllers: authController, rfqController, quotationController"]
+    subgraph Server ["Server: Node.js & Express REST API"]
+        Router["Express Routers: Auth, RFQs, Quotations"]
+        AuthMW["Middleware: protect, optionalAuth, authorize"]
+        Controllers["Controllers: Business Logic"]
         Router --> AuthMW
         AuthMW --> Controllers
     end
 
-    subgraph Database ["Database (MongoDB)"]
+    subgraph Database ["Database: MongoDB"]
         UserCol[("Users Collection")]
         RfqCol[("RFQs Collection")]
         QuoteCol[("Quotations Collection")]
@@ -81,7 +81,7 @@ flowchart TD
         Controllers --> QuoteCol
     end
 
-    Axios -->|HTTP / JSON (Bearer Token)| Router
+    Axios -->|"HTTP Requests with Bearer Token"| Router
 ```
 
 ---
