@@ -1,8 +1,18 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const dns = require('dns');
 const User = require('../models/User');
 const RFQ = require('../models/RFQ');
 const Quotation = require('../models/Quotation');
+
+// Configure reliable DNS servers for Atlas SRV resolution
+if (dns.setServers) {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch (e) {
+    // Continue
+  }
+}
 
 dotenv.config({ path: __dirname + '/../.env' });
 
