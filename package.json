@@ -1,0 +1,19 @@
+{
+  "name": "b2b-rfq-marketplace",
+  "version": "1.0.0",
+  "description": "Full-Stack B2B Request for Quotation (RFQ) Marketplace",
+  "scripts": {
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed": "npm --prefix server run seed",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start"
+  },
+  "keywords": ["b2b", "rfq", "marketplace", "mern"],
+  "author": "Aanshikesh Rawat",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
