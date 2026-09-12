@@ -1,14 +1,21 @@
 const app = require('../server/server');
 
 module.exports = (req, res) => {
-  // If Vercel rewrote the URL to /api/index.js, restore the original incoming path
-  const matchedPath = req.headers['x-matched-path'];
-  const vercelPath = req.query?._vercel_path;
+  try {
+    const urlObj = new URL(req.url, 'http://localhost');
+    const vercelPath = urlObj.searchParams.get('_vercel_path');
 
-  if (matchedPath && matchedPath.startsWith('/api')) {
-    req.url = matchedPath;
-  } else if (vercelPath) {
-    req.url = '/api/' + vercelPath;
+    if (vercelPath) {
+      urlObj.searchParams.delete('_vercel_path');
+      const finalUrl = '/api/' + vercelPath + urlObj.search;
+      req.url = finalUrl;
+      req.originalUrl = finalUrl;
+    } else if (req.headers['x-matched-path'] && req.headers['x-matched-path'].startsWith('/api')) {
+      req.url = req.headers['x-matched-path'];
+      req.originalUrl = req.headers['x-matched-path'];
+    }
+  } catch (e) {
+    // Continue with existing URL if parsing fails
   }
 
   return app(req, res);
