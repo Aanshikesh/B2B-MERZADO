@@ -127,13 +127,14 @@ flowchart TD
 - **MongoDB** running locally on `mongodb://127.0.0.1:27017` (or a MongoDB Atlas URI)
 - **npm** (v9 or higher)
 
-### 1. Clone or Open the Repository
+### 1. Clone the Repository
 ```bash
-cd "c:/Users/sbraw/Desktop/B2B Application"
+git clone https://github.com/Aanshikesh/B2B-MERZADO.git
+cd B2B-MERZADO
 ```
 
 ### 2. Environment Configuration
-The backend uses environment variables located in `server/.env`:
+Create a `.env` file in the `server/` directory (or copy from `server/.env.example`):
 ```ini
 PORT=5000
 MONGODB_URI=mongodb://127.0.0.1:27017/b2b_rfq_db
