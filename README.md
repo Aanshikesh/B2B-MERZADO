@@ -2,6 +2,7 @@
 
 > **Full-Stack Software Development Assignment**  
 > **Candidate:** AANSHIKESH RAWAT  
+> **Live Application URL:** [https://b2-b-merzado.vercel.app](https://b2-b-merzado.vercel.app)  
 > **GitHub Repository:** [https://github.com/Aanshikesh/B2B-MERZADO](https://github.com/Aanshikesh/B2B-MERZADO)  
 > **Stack:** MERN (MongoDB, Express.js, React.js, Node.js with plain JavaScript)
 
