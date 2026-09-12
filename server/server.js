@@ -46,14 +46,37 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/rfqs', require('./routes/rfqRoutes'));
 app.use('/api/quotations', require('./routes/quotationRoutes'));
 
+// Serve frontend static build files (for production & Vercel)
+const path = require('path');
+const fs = require('fs');
+
+const possibleDistPaths = [
+  path.join(process.cwd(), 'client/dist'),
+  path.join(__dirname, '../client/dist'),
+  path.join(__dirname, 'client/dist')
+];
+
+const distPath = possibleDistPaths.find((p) => fs.existsSync(p));
+
+if (distPath) {
+  app.use(express.static(distPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.originalUrl.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
 // 404 and Error Middleware
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// Only listen when run directly (not in Vercel serverless)
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+// Only listen when run directly (not when imported by Vercel serverless)
+if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   });
